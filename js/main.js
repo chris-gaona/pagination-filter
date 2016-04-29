@@ -34,7 +34,7 @@ $(function() {
     //pagination links...
     //could make this a dropdown to allow user
     //to pick number of students to display per page
-    var totalLinks = Math.floor(totalStudents/linksPerPage);
+    var totalLinks = Math.ceil(totalStudents/linksPerPage);
 
     //links variable holds initial number to utilize
     //in the while loop below...see below for details
@@ -93,9 +93,8 @@ $(function() {
   function getCorrectPage(page) {
     //get the element number where to start the slice
     //multiply the page, which is the value passed in
-    //when the function is called, by linksPerPage
-    //which in our case is 10
-    var startSlice = page * linksPerPage;
+    //when the function is called minus 1, by //linksPerPage which in our case is 10
+    var startSlice = (page - 1) * linksPerPage;
     //get the element number where to end the slice
     //simply add the startSlice value to the
     //linksPerPage value, which is 10
