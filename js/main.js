@@ -71,6 +71,10 @@ $(function() {
     e.preventDefault();
   });
 
+  //targets first li element & adds active class on
+  //page load
+  $('.pagination ul li:first-child a').addClass('active');
+
   //creates getClickedLink function
   function getClickedLink() {
     //on click of each li element in .pagination ul
@@ -80,6 +84,14 @@ $(function() {
       //clicked li element's child's text, which
       //is the text of the a tag within the li element
       var currentPage = $(this).children().text();
+
+      //add active class to child, or a tag, of li
+      //element clicked on
+      $(this).children().addClass('active');
+
+      //remove active class from siblings a tags
+      //of li element clicked
+      $(this).siblings().children().removeClass('active');
 
       //calls getCorrectPage function & passes the
       //currentPage value into it
