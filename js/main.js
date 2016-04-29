@@ -19,6 +19,11 @@ $(function() {
   //page class
   $('.page').append(pagination);
 
+
+  ///////////////////////////////
+  //PAGINATION
+  ///////////////////////////////
+
   //linksPerPage variable holds the number of links
   //per page desired
   var linksPerPage = 10;
@@ -117,4 +122,35 @@ $(function() {
     $('.student-list li').css('display', 'none').slice(startSlice, endSlice).css('display', 'block');
   }
 
+  ///////////////////////////////
+  //SEARCH
+  ///////////////////////////////
+
+  //
+  //Add an event listener to the search button. When the user clicks on the button it should use the text in the search input to filter the results.
+  //
+  $('.student-search button').on('click', function() {
+    var searchVal = $('.student-search input').val();
+    getSearchResults(searchVal);
+  });
+
+  //
+  //Users should be able to search by name or e-mail address. And partial matches, like just a first name, should be displayed in the results.
+  //
+
+  function getSearchResults(value) {
+    $('.student-list li').each(function() {
+      var text = $(this).text().toLowerCase();
+
+      if (text.indexOf(value) != -1) {
+        $(this).css('display', 'block');
+      } else {
+        $(this).css('display', 'none');
+      }
+    });
+  }
+
+  //
+  //Search results should also be paginated. For example, if the search returns more than 10 results, those results should be paginated too.
+  //
 });
