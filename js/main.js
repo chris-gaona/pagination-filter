@@ -63,6 +63,9 @@ $(function() {
     //page load
     $('.pagination ul li:first-child a').addClass('active');
 
+    //adds slide-in animation class to all list items
+    $('.student-list li').addClass('slide-in');
+
   } //initialState()
   initialState();
 
