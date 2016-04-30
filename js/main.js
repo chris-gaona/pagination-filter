@@ -15,10 +15,9 @@ $(function() {
   //page-header class
   $('.page-header').append(search);
 
-  //uses jquery to append pagination buttons to
+  //uses jquery to append pagination container to
   //page class
   $('.page').append(pagination);
-
 
   ///////////////////////////////
   //PAGINATION
@@ -29,9 +28,32 @@ $(function() {
   var linksPerPage = 10;
   //totalStudents variable holds the total number
   //of students on the page
-  var totalStudents = $('.student-list li').length;
+  // var totalStudents = $('.student-list li').length;
+  var allStudentsArray = $('.student-list li').toArray();
+  var totalStudents = allStudentsArray.length;
   //call numberPageLinks function
   numberPageLinks(totalStudents);
+
+  function initialState() {
+    $('.student-list').empty().append(allStudentsArray);
+
+    //hides all but the first 10 students
+    //when the page loads
+    $('.student-list li').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
+
+    //uses event.preventDefault function to make it
+    //so the anchor links don't use their defaults
+    //and attempt to go to a different page
+    $('.pagination ul li a').on('click', function(e) {
+      e.preventDefault();
+    });
+
+    //targets first li element & adds active class on
+    //page load
+    $('.pagination ul li:first-child a').addClass('active');
+
+  } //initialState()
+  initialState();
 
   //creates numberPageLinks function
   function numberPageLinks(number) {
@@ -71,25 +93,6 @@ $(function() {
       links++;
     }
   } //numberPageLinks()
-
-  function initialState() {
-    //hides all but the first 10 students
-    //when the page loads
-    $('.student-list li').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
-
-    //uses event.preventDefault function to make it
-    //so the anchor links don't use their defaults
-    //and attempt to go to a different page
-    $('.pagination ul li a').on('click', function(e) {
-      e.preventDefault();
-    });
-
-    //targets first li element & adds active class on
-    //page load
-    $('.pagination ul li:first-child a').addClass('active');
-
-  } //initialState()
-  initialState();
 
   //creates getClickedLink function
   function getClickedLink() {
@@ -160,7 +163,9 @@ $(function() {
   //
 
   function getSearchResults(value) {
-    $('.student-list li').each(function() {
+    var filterStudentsArray = [];
+
+    $.each(allStudentsArray, function() {
       var text = $(this).text().toLowerCase();
 
       //var re = /pattern/flags;
@@ -174,15 +179,26 @@ $(function() {
 
       if (text.indexOf(value) != -1) {
         $(this).css('display', 'block');
+        filterStudentsArray.push($(this));
       } else {
         $(this).css('display', 'none');
       }
-    });
-    var filteredStudents = $('.student-list li:visible').length;
-    console.log($('.student-list li:visible').length);
+    }); //.each ()
+
+    console.log(filterStudentsArray);
+    $('.student-list').empty().append(filterStudentsArray);
     //call numberPageLinks function
-    numberPageLinks(filteredStudents);
+    numberPageLinks(filterStudentsArray.length);
+    //hides all but the first 10 students
+    //when the page loads
+    $('.student-list li').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
+    
     getClickedLink();
+
+    $('.pagination ul li:first-child a').addClass('active');
+
+
+    // $('.student-list li:visible').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
 
   } //getSearchResults()
 
