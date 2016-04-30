@@ -30,16 +30,25 @@ $(function() {
   //totalStudents variable holds the total number
   //of students on the page
   var totalStudents = $('.student-list li').length;
+  //call numberPageLinks function
+  numberPageLinks(totalStudents);
 
   //creates numberPageLinks function
-  function numberPageLinks() {
+  function numberPageLinks(number) {
+    //removes existing pagination buttons first
+    $('.pagination ul').empty();
+
+    if (number <= 10) {
+      return;
+    }
+
     //totalLinks variable holds the value of total
     //number of students divided by desired links
     //per page --> result is total number of
     //pagination links...
     //could make this a dropdown to allow user
     //to pick number of students to display per page
-    var totalLinks = Math.ceil(totalStudents/linksPerPage);
+    var totalLinks = Math.ceil(number/linksPerPage);
 
     //links variable holds initial number to utilize
     //in the while loop below...see below for details
@@ -61,24 +70,26 @@ $(function() {
       //totalLinks
       links++;
     }
-  }
-  //call numberPageLinks function
-  numberPageLinks();
+  } //numberPageLinks()
 
-  //hides all but the first 10 students
-  //when the page loads
-  $('.student-list li').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
+  function initialState() {
+    //hides all but the first 10 students
+    //when the page loads
+    $('.student-list li').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
 
-  //uses event.preventDefault function to make it
-  //so the anchor links don't use their defaults
-  //and attempt to go to a different page
-  $('.pagination ul li a').on('click', function(e) {
-    e.preventDefault();
-  });
+    //uses event.preventDefault function to make it
+    //so the anchor links don't use their defaults
+    //and attempt to go to a different page
+    $('.pagination ul li a').on('click', function(e) {
+      e.preventDefault();
+    });
 
-  //targets first li element & adds active class on
-  //page load
-  $('.pagination ul li:first-child a').addClass('active');
+    //targets first li element & adds active class on
+    //page load
+    $('.pagination ul li:first-child a').addClass('active');
+
+  } //initialState()
+  initialState();
 
   //creates getClickedLink function
   function getClickedLink() {
@@ -102,7 +113,7 @@ $(function() {
       //currentPage value into it
       getCorrectPage(currentPage);
     });
-  }
+  } //getClickedLink()
   //calls the getClickedLink function
   getClickedLink();
 
@@ -120,7 +131,7 @@ $(function() {
     //hides all but the students between startSlice
     //& endSlice
     $('.student-list li').css('display', 'none').slice(startSlice, endSlice).css('display', 'block');
-  }
+  } //getCorrectPage()
 
   ///////////////////////////////
   //SEARCH
@@ -131,6 +142,16 @@ $(function() {
   //
   $('.student-search button').on('click', function() {
     var searchVal = $('.student-search input').val();
+
+    if (searchVal.length === 0) {
+      //call numberPageLinks function
+      numberPageLinks(totalStudents);
+
+      initialState();
+
+      return;
+    }
+
     getSearchResults(searchVal);
   });
 
@@ -142,13 +163,28 @@ $(function() {
     $('.student-list li').each(function() {
       var text = $(this).text().toLowerCase();
 
+      //var re = /pattern/flags;
+      //taken from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters_to_verify_input
+      // var regEx = /^[a-z]+join$/i;
+      // if (regEx.test(value)) {
+      //   console.log('true');
+      // } else {
+      //   console.log('false');
+      // }
+
       if (text.indexOf(value) != -1) {
         $(this).css('display', 'block');
       } else {
         $(this).css('display', 'none');
       }
     });
-  }
+    var filteredStudents = $('.student-list li:visible').length;
+    console.log($('.student-list li:visible').length);
+    //call numberPageLinks function
+    numberPageLinks(filteredStudents);
+    getClickedLink();
+
+  } //getSearchResults()
 
   //
   //Search results should also be paginated. For example, if the search returns more than 10 results, those results should be paginated too.
