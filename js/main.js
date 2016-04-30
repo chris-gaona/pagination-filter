@@ -31,22 +31,33 @@ $(function() {
   // var totalStudents = $('.student-list li').length;
   var allStudentsArray = $('.student-list li').toArray();
   var totalStudents = allStudentsArray.length;
-  //call numberPageLinks function
+
+  //calls numberPageLinks function & passes totalStudents
+  //value into it
   numberPageLinks(totalStudents);
 
-  function initialState() {
-    $('.student-list').empty().append(allStudentsArray);
-
-    //hides all but the first 10 students
-    //when the page loads
-    $('.student-list li').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
-
+  //creates preventDefaultBehavior function
+  function preventDefaultBehavior() {
     //uses event.preventDefault function to make it
     //so the anchor links don't use their defaults
     //and attempt to go to a different page
     $('.pagination ul li a').on('click', function(e) {
       e.preventDefault();
     });
+  } //preventDefaultBehavior()
+
+  //creates initialState function
+  function initialState() {
+    //removes existing content from unordered list &
+    //appends allStudentsArray list items to it
+    $('.student-list').empty().append(allStudentsArray);
+
+    //hides all but the first 10 students
+    //when the page loads
+    $('.student-list li').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
+
+    //calls preventDefaultBehavior function
+    preventDefaultBehavior();
 
     //targets first li element & adds active class on
     //page load
@@ -60,7 +71,11 @@ $(function() {
     //removes existing pagination buttons first
     $('.pagination ul').empty();
 
+    //if number value passed through is less than or
+    //equal to 10 do the following...
     if (number <= 10) {
+      //return, which stops anything after it from
+      //running...there is no need for page buttons
       return;
     }
 
@@ -73,7 +88,7 @@ $(function() {
     var totalLinks = Math.ceil(number/linksPerPage);
 
     //links variable holds initial number to utilize
-    //in the while loop below...see below for details
+    //in the while loop below...see below for more
     var links = 0;
     //linkNumber variable holds the intial number (1)
     //to inject into the html using jquery
@@ -87,7 +102,7 @@ $(function() {
       //linkNumber was defined above & starts at 1
       //and then every loop through gets 1 added
       $('.pagination ul').append('<li><a href="#">' + linkNumber++ + '</a></li>');
-      //every loop until while loop is false...1 is
+      //every loop until while loop is false, 1 is
       //added to links variable until it is equal to
       //totalLinks
       links++;
@@ -100,7 +115,7 @@ $(function() {
     //do the following...
     $('.pagination ul').on('click', 'li', function() {
       //currentPage variable holds the currently
-      //clicked li element's child's text, which
+      //clicked li element child's text, which
       //is the text of the a tag within the li element
       var currentPage = $(this).children().text();
 
@@ -122,13 +137,15 @@ $(function() {
 
   //creates getCorrectPage function
   function getCorrectPage(page) {
-    //get the element number where to start the slice
-    //multiply the page, which is the value passed in
-    //when the function is called minus 1, by //linksPerPage which in our case is 10
+    //get the element number where to start the slice...
+    //multiply page -- the value passed in
+    //when the function is called minus 1 -- by
+    //linksPerPage which in our case is 10
     var startSlice = (page - 1) * linksPerPage;
-    //get the element number where to end the slice
+
+    //get the element number where to end the slice...
     //simply add the startSlice value to the
-    //linksPerPage value, which is 10
+    //linksPerPage value
     var endSlice = startSlice + linksPerPage;
 
     //hides all but the students between startSlice
@@ -140,21 +157,27 @@ $(function() {
   //SEARCH
   ///////////////////////////////
 
-  //
-  //Add an event listener to the search button. When the user clicks on the button it should use the text in the search input to filter the results.
-  //
+  //adds event listener to search button that listens for
+  //user clicks & adds a callback function
   $('.student-search button').on('click', function() {
+    //searchVal variable holds the search input text value
     var searchVal = $('.student-search input').val();
 
+    //if searchVal is empty do the following...
     if (searchVal.length === 0) {
-      //call numberPageLinks function
+      //calls numberPageLinks function & passes in totalStudents
+      //variable
       numberPageLinks(totalStudents);
 
+      //calls initialState function
       initialState();
 
+      //return, which stops anything after it from
+      //running
       return;
     }
 
+    //calls getSearchResults with searchVal passed in
     getSearchResults(searchVal);
   });
 
@@ -162,10 +185,15 @@ $(function() {
   //Users should be able to search by name or e-mail address. And partial matches, like just a first name, should be displayed in the results.
   //
 
+  //creates getSearchResults function & passes in value
   function getSearchResults(value) {
+    //filterStudentsArray variable holds empty array
     var filterStudentsArray = [];
 
+    //jquery.each function iterates through the allStudentsArray
     $.each(allStudentsArray, function() {
+      //text variable holds text of each li element & makes
+      //it all lowercase
       var text = $(this).text().toLowerCase();
 
       //var re = /pattern/flags;
@@ -177,28 +205,42 @@ $(function() {
       //   console.log('false');
       // }
 
+      //if value matches anything in text do the following...
       if (text.indexOf(value) != -1) {
+        //current element in iteration that matches, change
+        //css to display block
         $(this).css('display', 'block');
+        //push each item that matches in iteration to
+        //filterStudentsArray
         filterStudentsArray.push($(this));
+
       } else {
+        //current element in iteration that does not match,
+        //change css to display none
         $(this).css('display', 'none');
-      }
+      } //if statement
+
     }); //.each ()
 
-    console.log(filterStudentsArray);
+    //removes existing items from .student-list & appends
+    //all items from filterStudentsArray
     $('.student-list').empty().append(filterStudentsArray);
-    //call numberPageLinks function
+
+    //calls numberPageLinks function & passes filterStudentsArray
+    //count
     numberPageLinks(filterStudentsArray.length);
-    //hides all but the first 10 students
-    //when the page loads
+
+    //hides all but the first 10 students in search results
     $('.student-list li').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
-    
+
+    //calls getClickedLink function
     getClickedLink();
 
+    //calls preventDefaultBehavior function
+    preventDefaultBehavior();
+
+    //makes first pagination button for search results active
     $('.pagination ul li:first-child a').addClass('active');
-
-
-    // $('.student-list li:visible').css('display', 'none').slice(0, linksPerPage).css('display', 'block');
 
   } //getSearchResults()
 
