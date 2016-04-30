@@ -157,6 +157,34 @@ $(function() {
   //SEARCH
   ///////////////////////////////
 
+  //
+  //As the user types in the search box, dynamically filter the student listings. In other words, after each letter is typed into the search box, display any listings that match
+  //
+
+  //adds event listener to search input that listens for
+  //user typing & does a live search
+  $('.student-search input').on('keyup', function() {
+    //searchVal variable holds the search input text value
+    var searchVal = $('.student-search input').val();
+
+    //if searchVal is empty do the following...
+    if (searchVal.length === 0) {
+      //calls numberPageLinks function & passes in totalStudents
+      //variable
+      numberPageLinks(totalStudents);
+
+      //calls initialState function
+      initialState();
+
+      //return, which stops anything after it from
+      //running
+      return;
+    }
+
+    //calls getSearchResults with searchVal passed in
+    getSearchResults(searchVal);
+  });
+
   //adds event listener to search button that listens for
   //user clicks & adds a callback function
   $('.student-search button').on('click', function() {
@@ -222,6 +250,20 @@ $(function() {
 
     }); //.each ()
 
+    //noResultsString variable holds the no results string
+    var noResultsString = '<li class="no-results">Sorry, no results. Please try another search.</li>';
+
+    //if there are no search results
+    if (filterStudentsArray.length === 0) {
+      //removes existing list items & appends noResultsString
+      $('.student-list').empty().append(noResultsString);
+      //removes existing pagination buttons
+      $('.pagination ul').empty();
+      //return, which stops anything after it from
+      //running
+      return;
+    }
+
     //removes existing items from .student-list & appends
     //all items from filterStudentsArray
     $('.student-list').empty().append(filterStudentsArray);
@@ -244,7 +286,4 @@ $(function() {
 
   } //getSearchResults()
 
-  //
-  //Search results should also be paginated. For example, if the search returns more than 10 results, those results should be paginated too.
-  //
 });
