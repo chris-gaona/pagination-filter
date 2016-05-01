@@ -206,18 +206,9 @@ $(function() {
 
     //jquery.each function iterates through the allStudentsArray
     $.each(allStudentsArray, function() {
-      //text variable holds text of each li element & makes
-      //it all lowercase
+      //text variable finds the .student-details div & holds text of //each li element & makes it all lowercase
+      //makes it so it does not query joined-details div
       var text = $(this).find('.student-details').text().toLowerCase();
-
-      //var re = /pattern/flags;
-      //taken from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters_to_verify_input
-      // var regEx = /^[a-z]+join$/i;
-      // if (regEx.test(value)) {
-      //   console.log('true');
-      // } else {
-      //   console.log('false');
-      // }
 
       //if value matches anything in text do the following...
       if (text.indexOf(value) != -1) {
