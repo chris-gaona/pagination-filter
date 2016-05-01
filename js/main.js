@@ -157,13 +157,8 @@ $(function() {
   //SEARCH
   ///////////////////////////////
 
-  //
-  //As the user types in the search box, dynamically filter the student listings. In other words, after each letter is typed into the search box, display any listings that match
-  //
-
-  //adds event listener to search input that listens for
-  //user typing & does a live search
-  $('.student-search input').on('keyup', function() {
+  //creates searchFun function
+  function searchFun() {
     //searchVal variable holds the search input text value
     var searchVal = $('.student-search input').val().toLowerCase();
 
@@ -183,30 +178,21 @@ $(function() {
 
     //calls getSearchResults with searchVal passed in
     getSearchResults(searchVal);
+
+  } //searchFun()
+
+  //adds event listener to search input that listens for
+  //user typing & does a live search
+  $('.student-search input').on('keyup', function() {
+    //calls searchFun function
+    searchFun();
   });
 
   //adds event listener to search button that listens for
   //user clicks & adds a callback function
   $('.student-search button').on('click', function() {
-    //searchVal variable holds the search input text value
-    var searchVal = $('.student-search input').val().toLowerCase();
-
-    //if searchVal is empty do the following...
-    if (searchVal.length === 0) {
-      //calls numberPageLinks function & passes in totalStudents
-      //variable
-      numberPageLinks(totalStudents);
-
-      //calls initialState function
-      initialState();
-
-      //return, which stops anything after it from
-      //running
-      return;
-    }
-
-    //calls getSearchResults with searchVal passed in
-    getSearchResults(searchVal);
+    //calls searchFun function
+    searchFun();
   });
 
   //
