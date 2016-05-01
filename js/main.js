@@ -208,7 +208,7 @@ $(function() {
     $.each(allStudentsArray, function() {
       //text variable holds text of each li element & makes
       //it all lowercase
-      var text = $(this).text().toLowerCase();
+      var text = $(this).find('.student-details').text().toLowerCase();
 
       //var re = /pattern/flags;
       //taken from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters_to_verify_input
