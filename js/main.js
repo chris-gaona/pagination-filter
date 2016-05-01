@@ -1,15 +1,12 @@
 $(function() {
   'use strict';
 
-  //define variables
-
-
   //define search variable to hold search html
   var search = '<div class="student-search"><input placeholder="Search for students..."><button>Search</button></div>';
 
   //define pagination variable to hold pagination
   //button html
-  var pagination = '<div class="pagination"><ul></ul></div>'
+  var pagination = '<div class="pagination"><ul></ul></div>';
 
   //uses jquery to append search bar to
   //page-header class
@@ -168,7 +165,7 @@ $(function() {
   //user typing & does a live search
   $('.student-search input').on('keyup', function() {
     //searchVal variable holds the search input text value
-    var searchVal = $('.student-search input').val();
+    var searchVal = $('.student-search input').val().toLowerCase();
 
     //if searchVal is empty do the following...
     if (searchVal.length === 0) {
@@ -192,7 +189,7 @@ $(function() {
   //user clicks & adds a callback function
   $('.student-search button').on('click', function() {
     //searchVal variable holds the search input text value
-    var searchVal = $('.student-search input').val();
+    var searchVal = $('.student-search input').val().toLowerCase();
 
     //if searchVal is empty do the following...
     if (searchVal.length === 0) {
