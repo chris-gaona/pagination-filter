@@ -25,7 +25,6 @@ $(function() {
   var linksPerPage = 10;
   //totalStudents variable holds the total number
   //of students on the page
-  // var totalStudents = $('.student-list li').length;
   var allStudentsArray = $('.student-list li').toArray();
   var totalStudents = allStudentsArray.length;
 
@@ -43,7 +42,7 @@ $(function() {
     });
   } //preventDefaultBehavior()
 
-  //creates initialState function
+  //creates initialState function for on page load
   function initialState() {
     //removes existing content from unordered list &
     //appends allStudentsArray list items to it
@@ -60,10 +59,11 @@ $(function() {
     //page load
     $('.pagination ul li:first-child a').addClass('active');
 
-    //adds slide-in animation class to all list items
-    $('.student-list li').addClass('slide-in');
+    //adds fade-in animation class to all list items
+    $('.student-list li').addClass('fade-in');
 
   } //initialState()
+  //calls initialState function on page load
   initialState();
 
   //creates numberPageLinks function
@@ -95,7 +95,7 @@ $(function() {
     var linkNumber = 1;
 
     //while links (initially 0 defined above) is less than totalLinks do the following...
-    //totalLinks in this case is 10 but could be
+    //totalLinks in this case is by groupings of 10 students but could be
     //some other value
     while (links < totalLinks) {
       //Uses jquery to append the dynamic html
@@ -138,8 +138,8 @@ $(function() {
   //creates getCorrectPage function
   function getCorrectPage(page) {
     //get the element number where to start the slice...
-    //multiply page -- the value passed in
-    //when the function is called minus 1 -- by
+    //multiply page — the value passed in
+    //when the function is called minus 1 — by
     //linksPerPage which in our case is 10
     var startSlice = (page - 1) * linksPerPage;
 
@@ -206,7 +206,8 @@ $(function() {
 
     //jquery.each function iterates through the allStudentsArray
     $.each(allStudentsArray, function() {
-      //text variable finds the .student-details div & holds text of //each li element & makes it all lowercase
+      //text variable finds the .student-details div & holds text of
+      //each li element & makes it all lowercase
       //makes it so it does not query joined-details div
       var text = $(this).find('.student-details').text().toLowerCase();
 
